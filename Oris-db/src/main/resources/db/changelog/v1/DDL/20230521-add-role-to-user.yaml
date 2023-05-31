@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: account_role
+            columns:
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_account
+              - column:
+                  name: role_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_role

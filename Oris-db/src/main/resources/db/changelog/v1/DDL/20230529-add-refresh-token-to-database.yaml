@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: refresh_token
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_refresh_token
+              - column:
+                  name: create_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    unique: true
+                    nullable: false
+                    foreignKeyName: pk_account
+              - column:
+                  name: refresh_token
+                  type: VARCHAR
+                  constraints:
+                    unique: true

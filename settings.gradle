@@ -1,0 +1,5 @@
+rootProject.name = 'Oris-Semester'
+include 'Oris-api'
+include 'Oris-db'
+include 'Oris-impl'
+

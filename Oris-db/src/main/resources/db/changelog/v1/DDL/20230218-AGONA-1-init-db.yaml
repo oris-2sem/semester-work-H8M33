@@ -1,0 +1,131 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        - createTable:
+            tableName: account
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_account
+              - column:
+                  name: create_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: username
+                  type: VARCHAR(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: hash_password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: post
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_post
+              - column:
+                  name: create_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: title
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_text
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_account
+        - createTable:
+            tableName: chat
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_chat
+              - column:
+                  name: create_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: title
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: message
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: create_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: message_text
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_account
+              - column:
+                  name: chat_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_chat
+        - createTable:
+            tableName: account_chat
+            columns:
+              - column:
+                  name: chat_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_chat
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_account

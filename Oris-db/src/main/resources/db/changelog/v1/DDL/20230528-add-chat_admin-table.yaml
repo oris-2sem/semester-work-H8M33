@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: chat_admin
+            columns:
+              - column:
+                  name: chat_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_chat
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_account

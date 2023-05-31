@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - dropColumn:
+            tableName: image_data
+            columns:
+              - column:
+                  name: name
+        - createTable:
+            tableName: image_owner
+            columns:
+              - column:
+                  name: image_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_image
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_account
+        - createTable:
+            tableName: image_account
+            columns:
+              - column:
+                  name: image_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_image
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_account
+        - createTable:
+            tableName: image_group
+            columns:
+              - column:
+                  name: image_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_image
+              - column:
+                  name: group_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: pk_group

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - renameTable:
+            oldTableName: group
+            newTableName: users_group

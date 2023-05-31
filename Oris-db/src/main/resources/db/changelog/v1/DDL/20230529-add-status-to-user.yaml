@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: create type status_type as enum ('ACTIVATION_WAITING','ACTIVATED', 'BANNED');
+        - addColumn:
+            tableName: account
+            columns:
+              - column:
+                  name: status
+                  type: status_type
+                  defaultValue: 'ACTIVATION_WAITING'
+                  constraints:
+                    nullable: false

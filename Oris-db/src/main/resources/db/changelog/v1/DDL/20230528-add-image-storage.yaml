@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: image_data
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_image
+              - column:
+                  name: create_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: name
+                  type: varchar
+              - column:
+                  name: type
+                  type: varchar
+              - column:
+                  name: image_data
+                  type: text

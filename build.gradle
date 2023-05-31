@@ -1,0 +1,47 @@
+allprojects {
+    group = 'com.example.orisimpl'
+    version = '0.1'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'war'
+
+    war{
+        enabled = true
+    }
+
+    ext {
+        mvcVersion = '5.3.16'
+        jacksonVersion = '2.13.2'
+        lombokVersion = '1.18.22'
+    }
+
+    sourceCompatibility = JavaVersion.VERSION_17
+
+    jar.archiveFileName = "${project.name}.jar"
+    war.archiveFileName = "${project.name}.war"
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+
+        implementation "org.springframework:spring-context-support:${mvcVersion}"
+        implementation "org.springframework:spring-webmvc:${mvcVersion}"
+        implementation "org.springframework:spring-context:${mvcVersion}"
+        implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+        implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    }
+}

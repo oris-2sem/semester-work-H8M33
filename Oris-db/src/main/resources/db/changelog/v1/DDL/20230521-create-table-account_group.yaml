@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: group_chat
+            columns:
+              - column:
+                  name: group_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: pk_group
+              - column:
+                  name: chat_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: pk_chat

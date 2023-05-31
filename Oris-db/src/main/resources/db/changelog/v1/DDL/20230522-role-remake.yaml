@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: H8M3
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: create type role_type as enum ('USER','ADMIN');
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_role
+              - column:
+                  name: create_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: role
+                  type: role_type
