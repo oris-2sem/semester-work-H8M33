@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Список групп</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1>Groups List</h1>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Message text</th>
+    </tr>
+    </thead>
+    <tbody id="messages">
+    <!-- Users will be dynamically populated here using jQuery -->
+    </tbody>
+  </table>
+  <div th:insert="bottom_message:: bottom"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.ajax({
+      url: '/messages',
+      type: 'GET',
+      headers:{
+        'Authorization': 'Bearer ' + getCookie("accessToken")
+      },
+      success: function(response) {
+        $.each(response, function(index, message) {
+          $('#messages tbody').append(
+                  "<tr><th scope='row'>" + message.id + "</th><td>" + message.message_text + "</td></tr>"
+          );
+        });
+      },
+      error: function (exception) {
+        alert(exception.responseText);
+      }
+    });
+  });
+</script>
+</body>
+</html>

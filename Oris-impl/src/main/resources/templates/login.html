@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authorization</title>
+
+    <!-- Подключаем стили Bootstrap 5.2.3 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center mb-4">Authorization</h1>
+
+            <form id="login-form" th:action="@{/auth/login}" method="post">
+                <div class="mb-3">
+                    <label for="username-input" class="form-label">Username</label>
+                    <input id="username-input" class="form-control" type="text" name="username" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password-input" class="form-label">Password</label>
+                    <input id="password-input" class="form-control" type="password" name="password" required/>
+                </div>
+
+                <button id="login-button" type="submit" class="btn btn-primary">Sing in</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        // Отправляем запрос на авторизацию при отправке формы
+        $('#login-form').submit(function (event) {
+            event.preventDefault();
+
+            let username = $('#username-input').val();
+            let password = $('#password-input').val();
+
+            $.ajax({
+                url: '/auth/login',
+                type: 'POST',
+                data: JSON.stringify({username: username, password: password}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                success: function (data) {
+                    var values = Object.values(data)
+                    var jsonString = JSON.stringify(data);
+                    // alert(jsonString)
+                    document.cookie = "tokenType=" + encodeURIComponent(values[0])+ "; max-age=10";
+                    document.cookie = "accessToken=" + encodeURIComponent(values[1])+ "; max-age=300";
+                    document.cookie = "refreshToken=" + encodeURIComponent(values[2])+ "; max-age=300";
+                    // alert(document.cookie)
+                    // alert(Object.values(data)[1])
+                    // var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+                    // alert(decodeURIComponent(cookieValue))
+                    // alert(JSON.parse(decodeURIComponent(cookieValue)))
+                    // alert(Object.values(JSON.parse(decodeURIComponent(cookieValue)))[1])
+                    // alert(Object.values(JSON.parse(jsonString))[1])
+                    // Если авторизация прошла успешно, перенаправляем пользователя на главную страницу
+                    //window.location.href = '/site/main';
+                },
+                error: function (exception) {
+                    // Выводим ошибку
+                    alert(exception.responseText);
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

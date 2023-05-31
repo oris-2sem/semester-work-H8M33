@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">My site</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#login" onclick="loadPage('login')">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#registration" onclick="loadPage('registration')">Registration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#activation" onclick="loadPage('activation')">Account activation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users" onclick="loadPage('users')">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#chats" onclick="loadPage('chats')">Chats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#posts" onclick="loadPage('posts')">Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#groups" onclick="loadPage('groups')">Groups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#messages" onclick="loadPage('messages')">Messages</a>
+                </li>
+            </ul>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</nav>
+<div id="content"></div>
+
+<script>
+    function loadPage(page) {
+        $.get("/site/" + page, function (data) {
+            $("#content").html(data);
+        });
+    }
+
+    let timer = setInterval(getAccessToken, 20000)
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function getAccessToken() {
+        var check = getCookie("tokenType");
+        var token = getCookie("refreshToken");
+        if (check == null && token != null) {
+            $.ajax({
+                url: '/auth/token',
+                type: 'POST',
+                data: JSON.stringify({refreshToken: token}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + getCookie("accessToken")
+                },
+                success: function (data) {
+                    var values = Object.values(data)
+                    document.cookie = "tokenType=" + encodeURIComponent(values[0]) + "; max-age=240 ";
+                    document.cookie = "accessToken=" + encodeURIComponent(values[1]) + "; max-age=300 ";
+                    document.cookie = "refreshToken=" + encodeURIComponent(token) + "; max-age=300 ";
+                },
+                error: function (jqXHR, exception) {
+                    // Выводим ошибку
+                    alert(jqXHR.responseText);
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

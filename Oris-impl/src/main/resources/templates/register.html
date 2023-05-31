@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center mb-4">Registration</h1>
+            <form id="register-form" th:action="@{/users/register}" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                    <div id="email-feedback" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Confirm password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                    <div id="confirm-password-feedback" class="invalid-feedback"></div>
+                </div>
+                <button id="register-submit" type="submit" class="btn btn-primary">Register</button>
+            </form>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#register-form").submit(function (evt) {
+            evt.preventDefault();
+            let password = $("#password").val();
+            let confirmPassword = $("#confirmPassword").val();
+            if (password !== confirmPassword) {
+                $("#confirm-password-feedback").text("Passwords do not match");
+                $("#confirmPassword").addClass("is-invalid");
+                exit()
+            }
+            $.ajax({
+                url: '/users/register',
+                type: 'POST', contentType: 'application/json',
+                data: JSON.stringify({
+                    username: $("input[name=username]").val(),
+                    password: $("input[name=password]").val(),
+                    email: $("input[name=email]").val()
+                }), success: function () {
+                    alert("Вы успешно зарегистрированы!");
+                },
+                error: function (exception) {
+                    alert(exception.responseText);
+                }
+            });
+        });
+        $("#confirmPassword").keyup(function() {
+            let password = $("#password").val();
+            let confirmPassword = $("#confirmPassword").val();
+            if (password === confirmPassword) {
+                $("#confirmPassword").removeClass("is-invalid");
+                $("#confirm-password-feedback").text("");
+            }
+        });
+    });
+</script>
+</body>
+</html>
